@@ -1,4 +1,4 @@
-# Backstrap 🚀
+# Bootnode 🚀
 
 A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible defaults, just like create-react-app but for backend.
 

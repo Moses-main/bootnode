@@ -1,8 +1,6 @@
+# Bootnode
 
-
-# Backstrap
-
-This project was generated using **Backstrap** 🚀 — a CLI tool to quickly scaffold an Express + MongoDB backend, just like `create-react-app` but for backend projects.
+This project was generated using **Bootnode** 🚀 — a CLI tool to quickly scaffold an Express + MongoDB backend, just like `create-react-app` but for backend projects.
 
 ---
 
@@ -75,18 +73,18 @@ Content-Type: application/json
 
 ## 🛠 Available Scripts
 
-* **`npm run dev`** → Run the server in development mode (with nodemon).
-* **`npm start`** → Run the server in production mode.
+- **`npm run dev`** → Run the server in development mode (with nodemon).
+- **`npm start`** → Run the server in production mode.
 
 ---
 
 ## ✅ Features
 
-* Express.js (REST API boilerplate)
-* MongoDB with Mongoose
-* Example User CRUD routes
-* Environment configuration with `.env`
-* Project structure ready for scaling
+- Express.js (REST API boilerplate)
+- MongoDB with Mongoose
+- Example User CRUD routes
+- Environment configuration with `.env`
+- Project structure ready for scaling
 
 ---
 
@@ -96,4 +94,4 @@ This project is licensed under the MIT License.
 
 ---
 
-> ℹ️ This project was generated using [Backstrap](https://github.com/yourusername/backstrap)
+> ℹ️ This project was generated using [Bootnode](https://github.com/yourusername/Bootnode)
