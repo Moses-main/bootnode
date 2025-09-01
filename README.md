@@ -21,10 +21,10 @@ A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible 
 
 ### Installation
 
-You can use BackstrapJS directly with npx:
+You can use bootnode directly with npx:
 
 ```bash
-npx backstrapjs my-backend
+npx bootnode my-backend
 ```
 
 This will create a new directory called `my-backend` with a complete backend structure.
@@ -32,21 +32,25 @@ This will create a new directory called `my-backend` with a complete backend str
 ### Getting Started
 
 1. Navigate to your project directory:
+
    ```bash
    cd my-backend
    ```
 
 2. Copy the example environment file and update with your configuration:
+
    ```bash
    cp .env.example .env
    ```
 
 3. Install dependencies:
+
    ```bash
    npm install
    ```
 
 4. Start the development server:
+
    ```bash
    npm run dev
    ```

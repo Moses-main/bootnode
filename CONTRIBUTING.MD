@@ -1,8 +1,8 @@
-# Contributing to BackstrapJS
+# Contributing to bootnode
 
 🎉 First off, thanks for taking the time to contribute! 🎉
 
-BackstrapJS is a minimal Express + MongoDB backend bootstrap template.  
+bootnode is a minimal Express + MongoDB backend bootstrap template.  
 We welcome contributions of all kinds — bug fixes, documentation improvements, feature requests, and code enhancements.
 
 ---
@@ -16,9 +16,9 @@ We welcome contributions of all kinds — bug fixes, documentation improvements,
 
 ```
 
-  git clone https://github.com/Moses-main/backstrapjs.git
+  git clone https://github.com/Moses-main/bootnode.git
 
-  cd backstrapjs
+  cd bootnode
 
 ```
 
@@ -59,4 +59,4 @@ Then, open a PR on the repository.
 
 ---
 
-Thank you for contributing to BackstrapJS! 🚀
+Thank you for contributing to bootnode! 🚀
