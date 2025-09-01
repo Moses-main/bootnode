@@ -1,0 +1,24 @@
+{
+  "name": "backstrapjs",
+  "version": "1.0.0",
+  "description": "A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible defaults, just like create-react-app but for backend.",
+  "main": "bin/index.js",
+  "bin": {
+    "backstrapjs": "bin/index.js"
+  },
+  "type": "module",
+  "keywords": [
+    "express",
+    "backend",
+    "mongodb",
+    "api",
+    "bootstrap",
+    "starter",
+    "cli"
+  ],
+  "author": "Moses Sunday",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^9.2.7"
+  }
+}
