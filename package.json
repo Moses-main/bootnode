@@ -4,7 +4,7 @@
   "description": "A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible defaults, just like create-react-app but for backend.",
   "main": "bin/index.js",
   "bin": {
-    "bootnode": "bin/index.js"
+    "bootnode": "./bin/index.js"
   },
   "type": "module",
   "keywords": [
@@ -19,6 +19,14 @@
   "author": "Moses Sunday",
   "license": "MIT",
   "dependencies": {
-    "inquirer": "^9.2.7"
-  }
+    "inquirer": "^9.3.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moses-main/bootnode-x.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Moses-main/bootnode-x/issues"
+  },
+  "homepage": "https://github.com/Moses-main/bootnode-x#readme"
 }
