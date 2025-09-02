@@ -1,6 +1,6 @@
 {
   "name": "bootnode",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible defaults, just like create-react-app but for backend.",
   "main": "bin/index.js",
   "bin": {
