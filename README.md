@@ -70,7 +70,7 @@ This will create a new directory called `my-backend` with a complete backend str
 - `src/controllers` - Route controllers
 - `src/models` - Database models
 - `src/routes` - API route definitions
-- `src/utils` - Utility functions and helpers
+
 
 ## Environment Variables
 
