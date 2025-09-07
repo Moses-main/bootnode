@@ -25,6 +25,10 @@
     "type": "git",
     "url": "git+https://github.com/Moses-main/bootnode-x.git"
   },
+  "files": [
+    "bin/",
+    "template/"
+  ],
   "bugs": {
     "url": "https://github.com/Moses-main/bootnode-x/issues"
   },

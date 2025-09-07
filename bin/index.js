@@ -9,9 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main() {
-  const { projectName } = await inquirer.prompt([
-    { name: "projectName", message: "Project name:", default: "my-app" },
-  ]);
+  // Use command line argument if provided, otherwise prompt
+  let projectName = process.argv[2];
+  
+  if (!projectName) {
+    const response = await inquirer.prompt([
+      { name: "projectName", message: "Project name:", default: "my-app" },
+    ]);
+    projectName = response.projectName;
+  }
 
   const targetDir = path.join(process.cwd(), projectName);
 
