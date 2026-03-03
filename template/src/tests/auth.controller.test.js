@@ -136,4 +136,23 @@ describe('Auth API', () => {
       expect(user.refreshToken).toBeUndefined();
     });
   });
+
+  describe('Auth rate limiting', () => {
+    it('should return 429 after exceeding auth request limit', async () => {
+      for (let i = 0; i < 20; i += 1) {
+        await request(app)
+          .post('/api/auth/login')
+          .send({ email: 'nobody@example.com', password: 'BadP@ss1' });
+      }
+
+      const limitedRes = await request(app)
+        .post('/api/auth/login')
+        .send({ email: 'nobody@example.com', password: 'BadP@ss1' });
+
+      expect(limitedRes.statusCode).toEqual(429);
+      expect(limitedRes.body.success).toBe(false);
+      expect(limitedRes.body.message).toContain('Too many login attempts');
+    });
+  });
+
 });

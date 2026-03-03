@@ -10,7 +10,7 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - [x] #4 Standardize validation middleware usage
 - [x] #5 Configure and enable Jest test runner in template
 - [x] #6 Add auth endpoint tests (register/login/refresh/logout/me)
-- [ ] #7 Enforce auth rate limiting on `/api/auth`
+- [x] #7 Enforce auth rate limiting on `/api/auth`
 - [ ] #8 Improve OpenAPI completeness and route consistency
 - [ ] #9 Add environment template and startup validation
 - [ ] #10 Add lint/format tooling and CI workflow
@@ -56,7 +56,7 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Add integration tests for auth happy and failure paths.
 - **Acceptance criteria:** Auth routes have integration coverage with in-memory DB.
 
-## 7) Enforce auth rate limiting on `/api/auth`
+## 7) ✅ Enforce auth rate limiting on `/api/auth`
 - **Type:** Security
 - **Problem:** `authLimiter` exists but is not applied to auth routes.
 - **Scope:** Apply limiter to auth router (or selected routes) and document limits.
