@@ -163,6 +163,7 @@ router.get("/:id", userIdValidation, validate, getUserById);
  *             required:
  *               - name
  *               - email
+ *               - password
  *             properties:
  *               name:
  *                 type: string
@@ -171,6 +172,9 @@ router.get("/:id", userIdValidation, validate, getUserById);
  *               email:
  *                 type: string
  *                 format: email
+ *               password:
+ *                 type: string
+ *                 minLength: 8
  *     responses:
  *       201:
  *         description: User created successfully
@@ -213,6 +217,9 @@ router.post("/", createUserValidation, validate, createUser);
  *               email:
  *                 type: string
  *                 format: email
+ *               password:
+ *                 type: string
+ *                 minLength: 8
  *     responses:
  *       200:
  *         description: User updated successfully
