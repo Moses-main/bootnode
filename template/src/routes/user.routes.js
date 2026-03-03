@@ -14,9 +14,9 @@ import {
   updateUserValidation, 
   searchUsersValidation, 
   paginationValidation, 
-  userIdValidation,
-  validate 
+  userIdValidation
 } from "../middleware/validators/user.validator.js";
+import { validate } from '../middleware/validators/validation.middleware.js';
 import { apiLimiter } from "../middleware/rateLimiter.js";
 
 // Create a new router instance
@@ -86,7 +86,7 @@ router.use(apiLimiter);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/", paginationValidation, validate, getUsers);
+router.get("/", validate(paginationValidation), getUsers);
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ router.get("/", paginationValidation, validate, getUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/search", searchUsersValidation, validate, searchUsers);
+router.get("/search", validate(searchUsersValidation), searchUsers);
 
 /**
  * @swagger
@@ -146,7 +146,7 @@ router.get("/search", searchUsersValidation, validate, searchUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/:id", userIdValidation, validate, getUserById);
+router.get("/:id", validate(userIdValidation), getUserById);
 
 /**
  * @swagger
@@ -189,7 +189,7 @@ router.get("/:id", userIdValidation, validate, getUserById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", createUserValidation, validate, createUser);
+router.post("/", validate(createUserValidation), createUser);
 
 /**
  * @swagger
@@ -240,7 +240,7 @@ router.post("/", createUserValidation, validate, createUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", updateUserValidation, validate, updateUser);
+router.patch("/:id", validate(updateUserValidation), updateUser);
 
 /**
  * @swagger
@@ -273,7 +273,7 @@ router.patch("/:id", updateUserValidation, validate, updateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id", userIdValidation, validate, deactivateUser);
+router.delete("/:id", validate(userIdValidation), deactivateUser);
 
 /**
  * @swagger
@@ -306,7 +306,7 @@ router.delete("/:id", userIdValidation, validate, deactivateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id/permanent", userIdValidation, validate, deleteUser);
+router.delete("/:id/permanent", validate(userIdValidation), deleteUser);
 
 // Export the router for use in other files
 export default router;

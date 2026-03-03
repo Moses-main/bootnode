@@ -7,9 +7,9 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - [x] #1 Fix auth refresh-token runtime error (`jwt` not imported)
 - [x] #2 Fix validator runtime error (`validationResult` not imported)
 - [x] #3 Align user creation with required password in schema
-- [ ] #4 Standardize validation middleware usage
+- [x] #4 Standardize validation middleware usage
 - [x] #5 Configure and enable Jest test runner in template
-- [ ] #6 Add auth endpoint tests (register/login/refresh/logout/me)
+- [x] #6 Add auth endpoint tests (register/login/refresh/logout/me)
 - [ ] #7 Enforce auth rate limiting on `/api/auth`
 - [ ] #8 Improve OpenAPI completeness and route consistency
 - [ ] #9 Add environment template and startup validation
@@ -38,7 +38,7 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Decide contract: either make password optional for admin-created users, or require password in create-user endpoint; update docs/tests accordingly.
 - **Acceptance criteria:** `POST /api/users` behavior matches schema and tests.
 
-## 4) Standardize validation middleware usage
+## 4) ✅ Standardize validation middleware usage
 - **Type:** Refactor
 - **Problem:** There are two different `validate` implementations in validators with different invocation styles and status codes.
 - **Scope:** Consolidate into one validation approach and one error schema.
@@ -50,7 +50,7 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Add proper Jest config/script for ESM and run test suite.
 - **Acceptance criteria:** `npm test` executes existing test files successfully.
 
-## 6) Add auth endpoint tests (register/login/refresh/logout/me)
+## 6) ✅ Add auth endpoint tests (register/login/refresh/logout/me)
 - **Type:** Test coverage
 - **Problem:** Tests cover users, but not auth token/cookie flows.
 - **Scope:** Add integration tests for auth happy and failure paths.
