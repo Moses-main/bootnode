@@ -10,8 +10,12 @@ import {
   verifyEmail
 } from '../controllers/auth.controller.js';
 import { protect } from '../utils/jwt.js';
+import { authLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
+
+// Apply stricter rate limiting to auth endpoints
+router.use(authLimiter);
 
 // Validation rules
 const registerRules = [
