@@ -18,11 +18,17 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 <<<<<<< codex/analyze-codebase-for-project-overview
 - [x] #12 Add role-based authorization to privileged user operations
 - [x] #13 Add pagination/search metadata and filtering improvements
+- [x] #14 Add optional email delivery integration hooks
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+- [x] #12 Add role-based authorization to privileged user operations
+- [x] #13 Add pagination/search metadata and filtering improvements
 =======
 - [ ] #12 Add role-based authorization to privileged user operations
 - [ ] #13 Add pagination/search metadata and filtering improvements
 >>>>>>> main
 - [ ] #14 Add optional email delivery integration hooks
+>>>>>>> main
 - [ ] #15 Improve CLI UX and safety checks
 
 ## 1) ✅ Fix auth refresh-token runtime error (`jwt` not imported)
@@ -94,7 +100,11 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 <<<<<<< codex/analyze-codebase-for-project-overview
 ## 12) ✅ Add role-based authorization to privileged user operations
 =======
+<<<<<<< codex/analyze-codebase-for-project-overview
+## 12) ✅ Add role-based authorization to privileged user operations
+=======
 ## 12) Add role-based authorization to privileged user operations
+>>>>>>> main
 >>>>>>> main
 - **Type:** Security/feature
 - **Problem:** `authorize` helper exists but is not used by routes.
@@ -104,14 +114,22 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 <<<<<<< codex/analyze-codebase-for-project-overview
 ## 13) ✅ Add pagination/search metadata and filtering improvements
 =======
+<<<<<<< codex/analyze-codebase-for-project-overview
+## 13) ✅ Add pagination/search metadata and filtering improvements
+=======
 ## 13) Add pagination/search metadata and filtering improvements
+>>>>>>> main
 >>>>>>> main
 - **Type:** Feature
 - **Problem:** Search endpoint returns array only; list endpoint has metadata but limited filtering controls.
 - **Scope:** Add metadata to search results and optional filters (active status, sort fields).
 - **Acceptance criteria:** Search/list APIs support documented advanced query options.
 
+<<<<<<< codex/analyze-codebase-for-project-overview
+## 14) ✅ Add optional email delivery integration hooks
+=======
 ## 14) Add optional email delivery integration hooks
+>>>>>>> main
 - **Type:** Feature
 - **Problem:** Email verification token generation exists, but sending is TODO.
 - **Scope:** Add email service abstraction + provider implementation (e.g., SMTP/Resend).

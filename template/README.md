@@ -45,6 +45,10 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/mydb
 JWT_SECRET=replace-me
 REFRESH_TOKEN_SECRET=replace-me
+<<<<<<< codex/analyze-codebase-for-project-overview
+EMAIL_PROVIDER=log
+=======
+>>>>>>> main
 ```
 
 ### 3. Run the development server
@@ -106,3 +110,8 @@ This project is licensed under the MIT License.
 ---
 
 > ℹ️ This project was generated using [Bootnode](https://github.com/yourusername/Bootnode)
+
+### Optional email hook
+
+Bootnode includes an email delivery hook for verification emails.
+By default it logs delivery payloads; set `EMAIL_PROVIDER=disabled` to skip delivery entirely in local/test workflows.

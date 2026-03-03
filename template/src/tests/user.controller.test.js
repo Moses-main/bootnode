@@ -29,6 +29,9 @@ describe('User API', () => {
     email: 'test@example.com',
     password: 'StrongP@ss1'
 <<<<<<< codex/analyze-codebase-for-project-overview
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+>>>>>>> main
   };
 
   const createAdminToken = async () => {
@@ -46,7 +49,10 @@ describe('User API', () => {
       .send({ email: adminUser.email, password: adminUser.password });
 
     return loginRes.body.data.accessToken;
+<<<<<<< codex/analyze-codebase-for-project-overview
 =======
+=======
+>>>>>>> main
 >>>>>>> main
   };
 
@@ -130,13 +136,19 @@ describe('User API', () => {
 
       expect(resName.statusCode).toEqual(200);
 <<<<<<< codex/analyze-codebase-for-project-overview
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+>>>>>>> main
       expect(Array.isArray(resName.body.data)).toBe(true);
       expect(resName.body.data.length).toBeGreaterThanOrEqual(1);
       expect(resName.body.data.some((u) => u.name === 'John Doe')).toBe(true);
       expect(resName.body.meta).toBeDefined();
+<<<<<<< codex/analyze-codebase-for-project-overview
+=======
 =======
       expect(resName.body.length).toBeGreaterThanOrEqual(1);
       expect(resName.body.some((u) => u.name === 'John Doe')).toBe(true);
+>>>>>>> main
 >>>>>>> main
 
       // Search by email
@@ -147,8 +159,13 @@ describe('User API', () => {
       expect(resEmail.body.data.length).toBeGreaterThanOrEqual(1);
       expect(resEmail.body.data.some((u) => u.name === 'Jane Smith')).toBe(true);
 =======
+<<<<<<< codex/analyze-codebase-for-project-overview
+      expect(resEmail.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(resEmail.body.data.some((u) => u.name === 'Jane Smith')).toBe(true);
+=======
       expect(resEmail.body.length).toBeGreaterThanOrEqual(1);
       expect(resEmail.body.some((u) => u.name === 'Jane Smith')).toBe(true);
+>>>>>>> main
 >>>>>>> main
     });
   });
@@ -232,7 +249,13 @@ describe('User API', () => {
         .delete(`/api/users/${user._id}`)
         .set('Authorization', `Bearer ${adminToken}`);
 =======
+<<<<<<< codex/analyze-codebase-for-project-overview
+      const res = await request(app)
+        .delete(`/api/users/${user._id}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+=======
       const res = await request(app).delete(`/api/users/${user._id}`);
+>>>>>>> main
 >>>>>>> main
 
       expect(res.statusCode).toEqual(200);
@@ -242,6 +265,9 @@ describe('User API', () => {
       const deactivatedUser = await User.findOne({ _id: user._id, isActive: false });
       expect(deactivatedUser).not.toBeNull();
 <<<<<<< codex/analyze-codebase-for-project-overview
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+>>>>>>> main
     });
 
     it('should reject non-admin delete attempts', async () => {
@@ -256,7 +282,10 @@ describe('User API', () => {
         .set('Authorization', `Bearer ${loginRes.body.data.accessToken}`);
 
       expect(res.statusCode).toEqual(403);
+<<<<<<< codex/analyze-codebase-for-project-overview
 =======
+=======
+>>>>>>> main
 >>>>>>> main
     });
   });
@@ -271,7 +300,13 @@ describe('User API', () => {
         .delete(`/api/users/${user._id}/permanent`)
         .set('Authorization', `Bearer ${adminToken}`);
 =======
+<<<<<<< codex/analyze-codebase-for-project-overview
+      const res = await request(app)
+        .delete(`/api/users/${user._id}/permanent`)
+        .set('Authorization', `Bearer ${adminToken}`);
+=======
       const res = await request(app).delete(`/api/users/${user._id}/permanent`);
+>>>>>>> main
 >>>>>>> main
 
       expect(res.statusCode).toEqual(200);

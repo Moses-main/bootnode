@@ -3,6 +3,7 @@ import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 import asyncHandler from 'express-async-handler';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { sendVerificationEmail } from '../services/email.service.js';
 
 // @desc    Register a new user
 // @route   POST /api/v1/auth/register
@@ -29,8 +30,12 @@ export const register = asyncHandler(async (req, res) => {
   const verificationToken = user.getEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
 
-  // TODO: Send verification email
-  // await sendVerificationEmail(user.email, verificationToken);
+  // Send verification email using provider hook (non-blocking)
+  try {
+    await sendVerificationEmail({ email: user.email, token: verificationToken });
+  } catch (emailError) {
+    console.error('Email delivery hook failed:', emailError.message);
+  }
 
   // Generate tokens
   const accessToken = generateToken(user._id);
