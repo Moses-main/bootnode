@@ -78,7 +78,7 @@ export const getUserById = async (req, res) => {
  */
 export const createUser = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
     
     // Check if user with email already exists
     const existingUser = await User.findOne({ email });
@@ -86,7 +86,7 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: 'Email already in use' });
     }
     
-    const user = await User.create({ name, email });
+    const user = await User.create({ name, email, password });
     res.status(201).json(user);
   } catch (error) {
     if (error.name === 'ValidationError') {
