@@ -11,8 +11,8 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - [x] #5 Configure and enable Jest test runner in template
 - [x] #6 Add auth endpoint tests (register/login/refresh/logout/me)
 - [x] #7 Enforce auth rate limiting on `/api/auth`
-- [ ] #8 Improve OpenAPI completeness and route consistency
-- [ ] #9 Add environment template and startup validation
+- [x] #8 Improve OpenAPI completeness and route consistency
+- [x] #9 Add environment template and startup validation
 - [ ] #10 Add lint/format tooling and CI workflow
 - [ ] #11 Add API versioning strategy
 - [ ] #12 Add role-based authorization to privileged user operations
@@ -62,13 +62,13 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Apply limiter to auth router (or selected routes) and document limits.
 - **Acceptance criteria:** Excessive auth requests return 429 with configured message.
 
-## 8) Improve OpenAPI completeness and route consistency
+## 8) ✅ Improve OpenAPI completeness and route consistency
 - **Type:** Documentation/API quality
 - **Problem:** Swagger coverage focuses users; auth route docs and common response/security usage are incomplete.
 - **Scope:** Add auth endpoint docs, request/response schemas, and examples.
 - **Acceptance criteria:** `/api-docs` fully documents user + auth APIs.
 
-## 9) Add environment template and startup validation
+## 9) ✅ Add environment template and startup validation
 - **Type:** Developer experience
 - **Problem:** README references `.env.example` but template does not enforce/validate required env vars at startup.
 - **Scope:** Add `.env.example` and runtime validation for required secrets/URIs.

@@ -4,12 +4,16 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./config/db.js";
+import { validateEnv } from './config/env.js';
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import swaggerDocs from "./config/swagger.js";
 
 // Load environment variables from .env file
 dotenv.config();
+
+// Validate required environment variables before app startup
+validateEnv();
 
 // Connect to MongoDB database (skip in tests; test setup manages connection)
 if (process.env.NODE_ENV !== 'test') {
