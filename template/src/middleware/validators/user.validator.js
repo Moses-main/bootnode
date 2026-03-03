@@ -1,4 +1,4 @@
-import { body, param, query } from 'express-validator';
+import { body, param, query, validationResult } from 'express-validator';
 
 // Common validation rules
 export const userIdValidation = [

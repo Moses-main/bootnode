@@ -56,7 +56,7 @@ describe('User API', () => {
         .post('/api/users')
         .send({ email: 'invalid-email' });
       
-      expect(res.statusCode).toEqual(400);
+      expect(res.statusCode).toEqual(422);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -136,7 +136,7 @@ describe('User API', () => {
       const res = await request(app)
         .get('/api/users/invalid-id');
       
-      expect(res.statusCode).toEqual(400);
+      expect(res.statusCode).toEqual(422);
     });
   });
 
@@ -166,7 +166,7 @@ describe('User API', () => {
         .patch(`/api/users/${user._id}`)
         .send({ email: 'invalid-email' });
       
-      expect(res.statusCode).toEqual(400);
+      expect(res.statusCode).toEqual(422);
       expect(res.body.errors).toBeDefined();
     });
   });
