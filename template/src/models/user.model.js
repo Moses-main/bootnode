@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
@@ -9,15 +9,15 @@ import crypto from 'crypto';
 const userSchema = new mongoose.Schema(
   {
     // User's full name
-    name: { 
-      type: String, 
+    name: {
+      type: String,
       required: [true, 'Name is required'],
       trim: true
     },
-    
+
     // User's email address (must be unique)
-    email: { 
-      type: String, 
+    email: {
+      type: String,
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
@@ -72,19 +72,20 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null
     }
-  }, { 
+  },
+  {
     timestamps: true,
-    toJSON: { 
+    toJSON: {
       virtuals: true,
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         delete ret.__v;
         delete ret.isActive;
         return ret;
       }
     },
-    toObject: { 
+    toObject: {
       virtuals: true,
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         delete ret.__v;
         delete ret.isActive;
         return ret;
@@ -94,9 +95,9 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  
+
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -107,20 +108,17 @@ userSchema.pre('save', async function(next) {
 });
 
 // Method to compare passwords
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Generate and hash password reset token
-userSchema.methods.getResetPasswordToken = function() {
+userSchema.methods.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
   // Hash token and set to resetPasswordToken field
-  this.resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
 
   // Set expire (10 minutes)
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
@@ -129,15 +127,12 @@ userSchema.methods.getResetPasswordToken = function() {
 };
 
 // Generate email verification token
-userSchema.methods.getEmailVerificationToken = function() {
+userSchema.methods.getEmailVerificationToken = function () {
   // Generate token
   const verificationToken = crypto.randomBytes(20).toString('hex');
 
   // Hash token and set to emailVerificationToken field
-  this.emailVerificationToken = crypto
-    .createHash('sha256')
-    .update(verificationToken)
-    .digest('hex');
+  this.emailVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
 
   // Set expire (24 hours)
   this.emailVerificationExpire = Date.now() + 24 * 60 * 60 * 1000;
@@ -149,7 +144,7 @@ userSchema.methods.getEmailVerificationToken = function() {
 userSchema.index({ name: 'text', email: 'text' });
 
 // Query middleware to filter out inactive users by default
-userSchema.pre(/^find/, function(next) {
+userSchema.pre(/^find/, function (next) {
   if (this.getFilter().isActive === undefined) {
     this.find({ isActive: { $ne: false } });
   }
@@ -157,4 +152,4 @@ userSchema.pre(/^find/, function(next) {
 });
 
 // Create and export the User model based on the schema
-export default mongoose.model("User", userSchema);
+export default mongoose.model('User', userSchema);

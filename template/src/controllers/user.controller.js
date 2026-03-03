@@ -1,5 +1,5 @@
 // Import the User model
-import User from "../models/user.model.js";
+import User from '../models/user.model.js';
 import mongoose from 'mongoose';
 
 /**
@@ -15,28 +15,39 @@ export const getUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    
-    // Build query for search if search term is provided
-    const searchQuery = req.query.search 
-      ? { $text: { $search: req.query.search } }
-      : {};
-    
-    // Get total count for pagination
-    const total = await User.countDocuments(searchQuery);
-    
-    // Fetch paginated users
-    const users = await User.find(searchQuery)
-      .sort({ createdAt: -1 })
+    const sortBy = req.query.sortBy || 'createdAt';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+
+    const query = {};
+
+    if (req.query.search) {
+      query.$text = { $search: req.query.search };
+    }
+
+    if (typeof req.query.isActive === 'boolean') {
+      query.isActive = req.query.isActive;
+    }
+
+    const total = await User.countDocuments(query);
+
+    const users = await User.find(query)
+      .sort({ [sortBy]: sortOrder })
       .skip(skip)
       .limit(limit);
-    
+
     res.json({
       data: users,
       meta: {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limit),
+        sortBy,
+        sortOrder: sortOrder === 1 ? 'asc' : 'desc',
+        filters: {
+          search: req.query.search || null,
+          isActive: typeof req.query.isActive === 'boolean' ? req.query.isActive : null
+        }
       }
     });
   } catch (error) {
@@ -56,13 +67,13 @@ export const getUserById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: 'Invalid user ID format' });
     }
-    
+
     const user = await User.findById(req.params.id);
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user', error: error.message });
@@ -78,20 +89,20 @@ export const getUserById = async (req, res) => {
  */
 export const createUser = async (req, res) => {
   try {
-    const { name, email } = req.body;
-    
+    const { name, email, password } = req.body;
+
     // Check if user with email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
-    
-    const user = await User.create({ name, email });
+
+    const user = await User.create({ name, email, password });
     res.status(201).json(user);
   } catch (error) {
     if (error.name === 'ValidationError') {
       // Handle validation errors (e.g., invalid email format)
-      const messages = Object.values(error.errors).map(val => val.message);
+      const messages = Object.values(error.errors).map((val) => val.message);
       return res.status(400).json({ message: 'Validation error', errors: messages });
     }
     res.status(500).json({ message: 'Error creating user', error: error.message });
@@ -110,12 +121,12 @@ export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email } = req.body;
-    
+
     // Validate ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid user ID format' });
     }
-    
+
     // Check if email is being updated and if it's already in use
     if (email) {
       const existingUser = await User.findOne({ email, _id: { $ne: id } });
@@ -123,21 +134,21 @@ export const updateUser = async (req, res) => {
         return res.status(400).json({ message: 'Email already in use' });
       }
     }
-    
+
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { $set: { name, email } },
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json(updatedUser);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(val => val.message);
+      const messages = Object.values(error.errors).map((val) => val.message);
       return res.status(400).json({ message: 'Validation error', errors: messages });
     }
     res.status(500).json({ message: 'Error updating user', error: error.message });
@@ -153,22 +164,22 @@ export const updateUser = async (req, res) => {
 export const deactivateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Validate ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid user ID format' });
     }
-    
+
     const user = await User.findByIdAndUpdate(
       id,
       { isActive: false, deactivatedAt: Date.now() },
       { new: true }
     );
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json({ message: 'User deactivated successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error deactivating user', error: error.message });
@@ -184,18 +195,18 @@ export const deactivateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Validate ID format
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid user ID format' });
     }
-    
+
     const user = await User.findByIdAndDelete(id);
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting user', error: error.message });
@@ -211,17 +222,39 @@ export const deleteUser = async (req, res) => {
 export const searchUsers = async (req, res) => {
   try {
     const { q } = req.query;
-    
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     if (!q || q.trim() === '') {
       return res.status(400).json({ message: 'Search query is required' });
     }
-    
-    const users = await User.find(
-      { $text: { $search: q } },
-      { score: { $meta: 'textScore' } }
-    ).sort({ score: { $meta: 'textScore' } });
-    
-    res.json(users);
+
+    const searchQuery = { $text: { $search: q } };
+    if (typeof req.query.isActive === 'boolean') {
+      searchQuery.isActive = req.query.isActive;
+    }
+
+    const total = await User.countDocuments(searchQuery);
+
+    const users = await User.find(searchQuery, { score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' } })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      data: users,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        query: q,
+        filters: {
+          isActive: typeof req.query.isActive === 'boolean' ? req.query.isActive : null
+        }
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error searching users', error: error.message });
   }

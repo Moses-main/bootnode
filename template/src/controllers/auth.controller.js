@@ -2,6 +2,8 @@ import User from '../models/user.model.js';
 import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 import asyncHandler from 'express-async-handler';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { sendVerificationEmail } from '../services/email.service.js';
 
 // @desc    Register a new user
 // @route   POST /api/v1/auth/register
@@ -28,8 +30,12 @@ export const register = asyncHandler(async (req, res) => {
   const verificationToken = user.getEmailVerificationToken();
   await user.save({ validateBeforeSave: false });
 
-  // TODO: Send verification email
-  // await sendVerificationEmail(user.email, verificationToken);
+  // Send verification email using provider hook (non-blocking)
+  try {
+    await sendVerificationEmail({ email: user.email, token: verificationToken });
+  } catch (emailError) {
+    console.error('Email delivery hook failed:', emailError.message);
+  }
 
   // Generate tokens
   const accessToken = generateToken(user._id);
@@ -68,7 +74,7 @@ export const login = asyncHandler(async (req, res) => {
 
   // Check for user
   const user = await User.findOne({ email }).select('+password');
-  
+
   if (!user || !(await user.matchPassword(password))) {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -113,7 +119,7 @@ export const login = asyncHandler(async (req, res) => {
 // @access  Private
 export const logout = asyncHandler(async (req, res) => {
   // Clear the refresh token from the user document
-  await User.findByIdAndUpdate(req.user._id, { 
+  await User.findByIdAndUpdate(req.user._id, {
     $unset: { refreshToken: 1 },
     $set: { lastLogin: Date.now() }
   });
@@ -136,7 +142,7 @@ export const logout = asyncHandler(async (req, res) => {
 // @access  Private
 export const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select('-password -__v');
-  
+
   res.status(200).json({
     success: true,
     data: user
@@ -157,9 +163,9 @@ export const refreshToken = asyncHandler(async (req, res) => {
   try {
     // Verify refresh token
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    
+
     // Find user with this refresh token
-    const user = await User.findOne({ 
+    const user = await User.findOne({
       _id: decoded.id,
       refreshToken
     });
@@ -171,7 +177,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
     // Generate new access token
     const accessToken = generateToken(user._id);
-    
+
     // Optionally generate a new refresh token and rotate it
     const newRefreshToken = generateRefreshToken(user._id);
     user.refreshToken = newRefreshToken;
@@ -200,10 +206,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 // @access  Public
 export const verifyEmail = asyncHandler(async (req, res) => {
   // Get hashed token
-  const hashedToken = crypto
-    .createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
+  const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
   const user = await User.findOne({
     emailVerificationToken: hashedToken,
