@@ -2,6 +2,8 @@
 
 A production-ready Express.js + MongoDB backend template with built-in user management, validation, and API documentation.
 
+> 📚 **Full documentation available in [`docs/`](docs/) folder** (GitBook format)
+
 ## Table of Contents
 - [Features](#features)
 - [API Endpoints](#api-endpoints)
