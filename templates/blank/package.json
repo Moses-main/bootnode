@@ -1,0 +1,27 @@
+{
+  "name": "bootnode",
+  "version": "1.0.0",
+  "description": "Minimal Express.js server - Generated with BootNode",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.2"
+  },
+  "keywords": ["bootnode", "express", "backend", "scaffold"],
+  "author": "",
+  "license": "MIT"
+}

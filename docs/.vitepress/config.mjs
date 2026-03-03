@@ -1,15 +1,16 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: "bootnode",
-  description: "A CLI tool to bootstrap Express + MongoDB backend projects with complete authentication",
+  title: "BootNode",
+  description: "Enterprise-Grade Backend Framework for Node.js",
   cleanUrls: true,
   ignoreDeadLinks: true,
   themeConfig: {
-    siteTitle: 'bootnode',
+    siteTitle: 'BootNode',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started/installation' },
+      { text: 'Templates', link: '/templates/overview' },
       { text: 'API Reference', link: '/api-reference/overview' },
     ],
     sidebar: [
@@ -22,11 +23,17 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Templates',
+        items: [
+          { text: 'Overview', link: '/templates/overview' },
+        ]
+      },
+      {
         text: 'API Reference',
         items: [
           { text: 'API Overview', link: '/api-reference/overview' },
           { text: 'Authentication', link: '/api-reference/auth-api' },
-          { text: 'Users CRUD', link: '/api-reference/users-api' },
+          { text: 'Users API', link: '/api-reference/users-api' },
         ]
       },
       {

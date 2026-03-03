@@ -2,44 +2,44 @@
 layout: home
 
 hero:
-  name: bootnode
-  text: Express + MongoDB Backend Generator
-  tagline: A CLI tool that scaffolds production-ready Express.js + MongoDB backends in seconds
+  name: BootNode
+  text: Enterprise-Grade Backend Framework
+  tagline: Build production-ready backend APIs in minutes with ready-to-use templates
   actions:
     - theme: brand
       text: Get Started
       link: /getting-started/installation
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/Moses-main/bootnode
+      text: Browse Templates
+      link: /templates/overview
 
 features:
   - title: ⚡ Instant Setup
-    details: Scaffold a complete backend in seconds with a single command
-  - title: 🔐 Complete Auth System
+    details: Generate a complete backend in seconds with a single command
+  - title: 📦 Ready Templates
+    details: Choose from 8 pre-built templates - Blog, CMS, LMS, FinTech, E-Commerce, SaaS
+  - title: 🔐 Complete Auth
     details: JWT authentication, email verification, password reset out of the box
-  - title: 📊 User Management
-    details: Full CRUD operations with soft delete, search, and pagination
+  - title: 🛡️ Enterprise Features
+    details: Rate limiting, input validation, error handling, logging
+  - title: 📊 MongoDB & PostgreSQL
+    details: Support for both databases with clean ORM patterns
   - title: 📝 Auto API Docs
-    details: Interactive Swagger UI documentation generated automatically
-  - title: 🛡️ Rate Limiting
-    details: Built-in protection against abuse with configurable limits
-  - title: ✅ Input Validation
-    details: Request validation using express-validator
-  - title: 🧪 Testing Ready
-    details: Jest setup with in-memory MongoDB for unit tests
-  - title: 🎨 Code Quality
-    details: ESLint and Prettier configured for consistent code style
+    details: Interactive Swagger UI documentation
+  - title: 🐳 Docker Ready
+    details: Dockerfile and docker-compose included
+  - title: 🧪 Testing Built-in
+    details: Jest setup with in-memory MongoDB
 ---
 
-## Why bootnode?
+## Why BootNode?
 
-Building a backend from scratch takes time. bootnode gives you a production-ready foundation so you can focus on your business logic, not boilerplate.
+Just like Laravel for PHP or Rails for Ruby, BootNode gives you a powerful, convention-based backend framework for Node.js.
 
 ### Traditional Approach
 
 ```bash
-# 1. Create project folder
+# 1. Create project
 mkdir my-backend && cd my-backend
 
 # 2. Initialize npm
@@ -48,48 +48,52 @@ npm init -y
 # 3. Install dependencies
 npm install express mongoose cors dotenv ...
 
-# 4. Create file structure
+# 4. Create folder structure
 mkdir src/models src/controllers src/routes src/middleware
 
-# 5. Write boilerplate code...
-# (hours later) Finally ready to start building features
+# 5. Write boilerplate...
+# (hours later) Finally ready
 ```
 
-### With bootnode
+### With BootNode
 
 ```bash
-npx bootnode my-backend
-cd my-backend
-npm run dev
+npx bootnode my-api --template blog
 ```
 
-That's it! Your backend is ready with:
-- ✅ User authentication (register/login/logout)
-- ✅ JWT tokens with refresh mechanism
-- ✅ Email verification
-- ✅ Password reset
-- ✅ Full CRUD API
+Done! Your Blog API is ready with:
+- ✅ User authentication (JWT)
+- ✅ Posts, Categories, Comments
+- ✅ Pagination & Search
 - ✅ Swagger documentation
 - ✅ Rate limiting
 - ✅ Input validation
 
+## Available Templates
+
+| Template | Use Case | Features |
+|----------|----------|----------|
+| `blank` | Minimal server | Basic Express setup |
+| `api` | REST API | Full CRUD, Auth, Validation |
+| `blog` | Blog API | Posts, Categories, Comments |
+| `cms` | Content Management | Articles, Media, Categories |
+| `lms` | Learning System | Courses, Lessons, Quizzes |
+| `fintech` | Finance App | Accounts, Transactions, Cards |
+| `ecommerce` | Online Store | Products, Orders, Cart |
+| `saas` | SaaS Platform | Multi-tenant, Teams, Subscriptions |
+
 ## Quick Start
 
 ```bash
-# Create a new project
-npx bootnode my-backend
+# Create a new project with specific template
+npx bootnode my-blog --template blog
 
-# Navigate to project
-cd my-backend
+# Or use interactive mode
+npx bootnode
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your MongoDB URI
-
-# Start development server
+# Start development
+cd my-blog
 npm run dev
 ```
 
-Your API is now live at `http://localhost:5000` with:
-- REST API: `http://localhost:5000/api`
-- Swagger Docs: `http://localhost:5000/api-docs`
+Your API is now live at `http://localhost:3000`
