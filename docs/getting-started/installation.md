@@ -2,64 +2,83 @@
 
 ## Prerequisites
 
-Before installing bootnode, ensure you have the following:
+Before using bootnode, ensure you have the following installed:
 
-- **Node.js** 14.x or later
-- **npm** 6.x or later
-- **MongoDB** (local or cloud instance like MongoDB Atlas)
-
-## Installing Node.js
-
-If you don't have Node.js installed, download it from [nodejs.org](https://nodejs.org) or use a version manager:
+### Node.js (v18+)
 
 ```bash
-# Using nvm (recommended)
-nvm install node
-nvm use node
+# Check if Node.js is installed
+node --version
 
-# Or using brew (macOS)
-brew install node
+# If not installed, use nvm (recommended)
+nvm install 20
+nvm use 20
+
+# Or download from nodejs.org
+# https://nodejs.org
 ```
 
-## Installing MongoDB
+### MongoDB
 
-### Local Installation
+You need a MongoDB instance. Choose one:
 
+**Option 1: Local MongoDB**
 ```bash
-# macOS (using Homebrew)
-brew tap mongodb/brew
+# macOS
 brew install mongodb-community
 brew services start mongodb-community
 
 # Ubuntu/Debian
-sudo apt update
 sudo apt install mongodb
 sudo systemctl start mongod
 ```
 
-### Cloud Instance
+**Option 2: MongoDB Atlas (Cloud)**
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a free cluster
+3. Get your connection string
 
-Alternatively, create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+## Quick Install
 
-## Installing bootnode
-
-No need to install globally! Use `npx` to run directly:
+No! Use ` installation needednpx` to run directly:
 
 ```bash
-npx bootnode --version
+npx bootnode --help
 ```
 
-This will show the current version of bootnode.
+This downloads and runs the CLI without global installation.
+
+## Global Installation (Optional)
+
+If you prefer having bootnode available globally:
+
+```bash
+npm install -g bootnode
+```
+
+Then use:
+```bash
+bootnode my-project
+```
 
 ## Updating bootnode
 
 To get the latest version:
 
 ```bash
-npx bootnode@latest --help
+npx bootnode@latest my-project
 ```
+
+## System Requirements
+
+| Requirement | Minimum | Recommended |
+|------------|---------|-------------|
+| Node.js | 18.x | 20.x+ |
+| npm | 8.x | 10.x |
+| MongoDB | 4.4+ | 6.0+ |
+| RAM | 512MB | 1GB+ |
 
 ## Next Steps
 
-- [Quick Start](quick-start.md) - Create your first project
-- [Project Structure](project-structure.md) - Understand the generated code
+- [Quick Start Guide](../getting-started/quick-start.md) - Create your first project
+- [Project Structure](../getting-started/project-structure.md) - Understand the generated code

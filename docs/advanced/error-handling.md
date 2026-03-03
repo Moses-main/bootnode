@@ -1,34 +1,35 @@
 # Error Handling
 
-bootnode implements consistent error handling across all API endpoints.
+How bootnode handles errors and how to customize error responses.
 
-## Error Response Format
+## Default Error Responses
 
-All errors follow a consistent JSON format:
+All API errors follow a consistent format:
 
 ```json
 {
   "success": false,
   "message": "Error description",
-  "errors": ["Detail 1", "Detail 2"]
+  "errors": ["Detailed error 1", "Detailed error 2"]
 }
 ```
 
 ## HTTP Status Codes
 
-| Status Code | Description |
-|-------------|-------------|
-| 400 | Bad Request - Invalid input data |
-| 404 | Not Found - Resource not found |
-| 409 | Conflict - Duplicate resource |
-| 429 | Too Many Requests - Rate limit exceeded |
-| 500 | Internal Server Error |
+| Status | Meaning | Example |
+|--------|---------|---------|
+| 200 | Success | Normal responses |
+| 201 | Created | User created |
+| 400 | Bad Request | Validation failed |
+| 401 | Unauthorized | Invalid/missing token |
+| 404 | Not Found | Resource doesn't exist |
+| 409 | Conflict | Duplicate entry |
+| 429 | Too Many Requests | Rate limit exceeded |
+| 500 | Server Error | Unexpected error |
 
 ## Error Types
 
-### 400 - Validation Error
-
-Returned when input validation fails.
+### Validation Error (400)
 
 ```json
 {
@@ -36,14 +37,21 @@ Returned when input validation fails.
   "message": "Validation error",
   "errors": [
     "Email is required",
-    "Name must be at least 3 characters"
+    "Password must be at least 8 characters"
   ]
 }
 ```
 
-### 404 - Not Found
+### Authentication Error (401)
 
-Returned when a requested resource doesn't exist.
+```json
+{
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
+
+### Not Found Error (404)
 
 ```json
 {
@@ -52,20 +60,7 @@ Returned when a requested resource doesn't exist.
 }
 ```
 
-### 409 - Conflict
-
-Returned when trying to create a duplicate resource.
-
-```json
-{
-  "success": false,
-  "message": "Email already exists"
-}
-```
-
-### 429 - Too Many Requests
-
-Returned when rate limit is exceeded.
+### Rate Limit Error (429)
 
 ```json
 {
@@ -74,36 +69,51 @@ Returned when rate limit is exceeded.
 }
 ```
 
-### 500 - Internal Server Error
-
-Returned when an unexpected error occurs.
-
-```json
-{
-  "success": false,
-  "message": "Internal server error"
-}
-```
-
 ## Custom Error Handling
 
-To add custom error handling in your controllers:
+Add custom error handlers in `src/app.js`:
 
 ```javascript
-const handleError = (res, message, errors = []) => {
-  return res.status(400).json({
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
     success: false,
-    message,
-    errors
+    message: 'Route not found'
   });
-};
+});
 
-// Usage
-if (!email) {
-  return handleError(res, 'Validation error', ['Email is required']);
-}
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+```
+
+## Validation Errors
+
+Validation is handled by `express-validator`. Custom validators can be added in route files:
+
+```javascript
+import { body } from 'express-validator';
+
+const customRules = [
+  body('email')
+    .isEmail()
+    .withMessage('Please provide a valid email')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters')
+    .matches(/\d/)
+    .withMessage('Password must contain a number')
+];
 ```
 
 ## Next Steps
 
-- [Rate Limiting](rate-limiting.md) - Configure rate limits
+- [Rate Limiting](./rate-limiting.md) - Configure rate limits

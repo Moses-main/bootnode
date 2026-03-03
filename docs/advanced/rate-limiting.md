@@ -1,14 +1,73 @@
 # Rate Limiting
 
-bootnode includes built-in rate limiting to protect your API from abuse.
+Protect your API from abuse with built-in rate limiting.
 
-## How It Works
+## Overview
 
-The API implements rate limiting using `express-rate-limit`:
+bootnode includes rate limiting to prevent abuse:
 
-- **100 requests** per **15 minutes** per IP address
-- Rate limit headers are included in responses
-- Exceeding the limit returns `429 Too Many Requests`
+- **General API**: 100 requests per 15 minutes
+- **Authentication endpoints**: 10 requests per 15 minutes
+
+## Default Configuration
+
+### General Rate Limiter
+
+Located in `src/app.js`:
+
+```javascript
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many requests, please try again later'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use('/api', limiter);
+```
+
+### Auth Rate Limiter
+
+More restrictive for auth endpoints in `src/routes/auth.routes.js`:
+
+```javascript
+import { authLimiter } from '../middleware/rateLimiter.js';
+router.use(authLimiter);
+```
+
+## Customizing Rate Limits
+
+### Environment Variables
+
+```env
+RATE_LIMIT_WINDOW_MS=900000  # 15 minutes in ms
+RATE_LIMIT_MAX=100            # requests per window
+```
+
+### Custom Per-Route Limiter
+
+Add rate limiting to specific routes:
+
+```javascript
+import rateLimit from 'express-rate-limit';
+
+const specialLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // 5 requests per minute
+  message: {
+    success: false,
+    message: 'Too many requests from this IP'
+  }
+});
+
+app.use('/api/special', specialLimiter);
+```
 
 ## Rate Limit Headers
 
@@ -16,75 +75,20 @@ Each response includes rate limit information:
 
 | Header | Description |
 |--------|-------------|
-| `X-RateLimit-Limit` | Maximum requests allowed |
-| `X-RateLimit-Remaining` | Remaining requests in window |
-| `X-RateLimit-Reset` | Timestamp when window resets |
+| `RateLimit-Limit` | Maximum requests allowed |
+| `RateLimit-Remaining` | Remaining requests in window |
+| `RateLimit-Reset` | Seconds until window resets |
 
-## Example Headers
-
+Example:
 ```
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 95
-X-RateLimit-Reset: 1696339200
-```
-
-## Configuration
-
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `RATE_LIMIT_WINDOW_MS` | Window duration in ms | `900000` (15 min) |
-| `RATE_LIMIT_MAX` | Max requests per window | `100` |
-
-### Example Configuration
-
-```bash
-# More restrictive
-RATE_LIMIT_WINDOW_MS=60000      # 1 minute
-RATE_LIMIT_MAX=10               # 10 requests per minute
-
-# Less restrictive
-RATE_LIMIT_WINDOW_MS=3600000    # 1 hour
-RATE_LIMIT_MAX=1000             # 1000 requests per hour
+RateLimit-Limit: 100
+RateLimit-Remaining: 95
+RateLimit-Reset: 1640000000
 ```
 
-## Customizing Rate Limiter
+## Skipping Rate Limiting
 
-To customize rate limiting, edit `src/middleware/rateLimiter.js`:
-
-```javascript
-const rateLimit = require('express-rate-limit');
-
-const limiter = rateLimit({
-  windowMs: process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000,
-  max: process.env.RATE_LIMIT_MAX || 100,
-  message: {
-    success: false,
-    message: 'Too many requests, please try again later'
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-module.exports = limiter;
-```
-
-## Skipping Successful Requests
-
-To only count failed requests:
-
-```javascript
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  skipSuccessfulRequests: true
-});
-```
-
-## IP Whitelisting
-
-To whitelist certain IPs:
+### For Specific IPs
 
 ```javascript
 const limiter = rateLimit({
@@ -97,9 +101,42 @@ const limiter = rateLimit({
 });
 ```
 
+### Skip Successful Requests
+
+```javascript
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  skipSuccessfulRequests: true // only count failed requests
+});
+```
+
 ## Best Practices
 
-1. **Adjust based on usage** - Monitor and tune limits
-2. **Consider user-based limits** - For authenticated APIs
-3. **Return helpful headers** - Help clients understand limits
-4. **Test thoroughly** - Ensure legitimate traffic isn't blocked
+1. **Start conservative** - Default limits work for most cases
+2. **Monitor** - Watch for legitimate users hitting limits
+3. **Document** - Let API consumers know the limits
+4. **Return helpful headers** - Clients can adapt to limits
+5. **Test thoroughly** - Ensure limits don't block valid traffic
+
+## Troubleshooting
+
+### Legitimate Users Blocked
+
+Increase limits or implement per-user limiting:
+
+```javascript
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  keyGenerator: (req) => req.user.id // rate limit per user, not IP
+});
+```
+
+### Behind Proxy
+
+If behind a load balancer/proxy:
+
+```javascript
+app.set('trust proxy', 1); // Express will use X-Forwarded-For
+```
