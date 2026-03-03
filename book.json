@@ -1,0 +1,8 @@
+{
+  "root": "./docs",
+  "output": "./pages",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}

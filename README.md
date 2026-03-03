@@ -2,7 +2,9 @@
 
 A production-ready Express.js + MongoDB backend template with built-in user management, validation, and API documentation.
 
-> 📚 **Full documentation available in [`docs/`](docs/) folder** (GitBook format)
+> 📖 **Full documentation available at: [https://moses-main.github.io/bootnode](https://moses-main.github.io/bootnode)**
+
+> 📚 **Or browse locally in the `docs/` folder**
 
 ## Table of Contents
 - [Features](#features)
