@@ -13,8 +13,8 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - [x] #7 Enforce auth rate limiting on `/api/auth`
 - [x] #8 Improve OpenAPI completeness and route consistency
 - [x] #9 Add environment template and startup validation
-- [ ] #10 Add lint/format tooling and CI workflow
-- [ ] #11 Add API versioning strategy
+- [x] #10 Add lint/format tooling and CI workflow
+- [x] #11 Add API versioning strategy
 - [ ] #12 Add role-based authorization to privileged user operations
 - [ ] #13 Add pagination/search metadata and filtering improvements
 - [ ] #14 Add optional email delivery integration hooks
@@ -74,13 +74,13 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Add `.env.example` and runtime validation for required secrets/URIs.
 - **Acceptance criteria:** Missing required env vars produce clear startup errors.
 
-## 10) Add lint/format tooling and CI workflow
+## 10) ✅ Add lint/format tooling and CI workflow
 - **Type:** Quality automation
 - **Problem:** No linting/format scripts or CI checks for test/lint.
 - **Scope:** Add ESLint + Prettier + GitHub Actions workflow.
 - **Acceptance criteria:** PRs run lint/test checks automatically.
 
-## 11) Add API versioning strategy
+## 11) ✅ Add API versioning strategy
 - **Type:** Architecture
 - **Problem:** Controller comments reference `/api/v1/*` while app routes currently mount at `/api/*`.
 - **Scope:** Introduce `/api/v1` base path and keep backwards compatibility or migration plan.

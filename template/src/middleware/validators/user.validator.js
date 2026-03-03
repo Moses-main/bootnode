@@ -1,11 +1,7 @@
 import { body, param, query, validationResult } from 'express-validator';
 
 // Common validation rules
-export const userIdValidation = [
-  param('id')
-    .isMongoId()
-    .withMessage('Invalid user ID format')
-];
+export const userIdValidation = [param('id').isMongoId().withMessage('Invalid user ID format')];
 
 export const createUserValidation = [
   body('name')
@@ -14,7 +10,7 @@ export const createUserValidation = [
     .withMessage('Name is required')
     .isLength({ min: 2, max: 50 })
     .withMessage('Name must be between 2 and 50 characters'),
-    
+
   body('email')
     .trim()
     .notEmpty()
@@ -40,13 +36,13 @@ export const createUserValidation = [
 
 export const updateUserValidation = [
   ...userIdValidation,
-  
+
   body('name')
     .optional()
     .trim()
     .isLength({ min: 2, max: 50 })
     .withMessage('Name must be between 2 and 50 characters'),
-    
+
   body('email')
     .optional()
     .trim()
@@ -65,12 +61,8 @@ export const searchUsersValidation = [
 ];
 
 export const paginationValidation = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer')
-    .toInt(),
-    
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer').toInt(),
+
   query('limit')
     .optional()
     .isInt({ min: 1, max: 100 })

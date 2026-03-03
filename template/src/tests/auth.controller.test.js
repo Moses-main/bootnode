@@ -23,14 +23,12 @@ describe('Auth API', () => {
   const testUser = {
     name: 'Auth User',
     email: 'auth@example.com',
-    password: 'StrongP@ss1',
+    password: 'StrongP@ss1'
   };
 
   describe('POST /api/auth/register', () => {
     it('should register a new user and return access token', async () => {
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send(testUser);
+      const res = await request(app).post('/api/auth/register').send(testUser);
 
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toBe(true);
@@ -42,9 +40,7 @@ describe('Auth API', () => {
     it('should reject duplicate email registration', async () => {
       await request(app).post('/api/auth/register').send(testUser);
 
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send(testUser);
+      const res = await request(app).post('/api/auth/register').send(testUser);
 
       expect(res.statusCode).toEqual(400);
     });
@@ -84,9 +80,7 @@ describe('Auth API', () => {
         .send({ email: testUser.email, password: testUser.password });
 
       const cookies = loginRes.headers['set-cookie'];
-      const res = await request(app)
-        .post('/api/auth/refresh-token')
-        .set('Cookie', cookies);
+      const res = await request(app).post('/api/auth/refresh-token').set('Cookie', cookies);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.success).toBe(true);
@@ -108,9 +102,7 @@ describe('Auth API', () => {
         .send({ email: testUser.email, password: testUser.password });
 
       const token = loginRes.body.data.accessToken;
-      const meRes = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', `Bearer ${token}`);
+      const meRes = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${token}`);
 
       expect(meRes.statusCode).toEqual(200);
       expect(meRes.body.success).toBe(true);
@@ -154,5 +146,4 @@ describe('Auth API', () => {
       expect(limitedRes.body.message).toContain('Too many login attempts');
     });
   });
-
 });

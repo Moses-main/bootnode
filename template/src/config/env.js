@@ -1,5 +1,5 @@
 const requiredEnvByMode = {
-  default: ['MONGO_URI', 'JWT_SECRET', 'REFRESH_TOKEN_SECRET'],
+  default: ['MONGO_URI', 'JWT_SECRET', 'REFRESH_TOKEN_SECRET']
 };
 
 export const validateEnv = () => {
@@ -12,7 +12,7 @@ export const validateEnv = () => {
   if (missing.length > 0) {
     throw new Error(
       `Missing required environment variables: ${missing.join(', ')}. ` +
-      'Copy .env.example to .env and provide the required values.'
+        'Copy .env.example to .env and provide the required values.'
     );
   }
 };

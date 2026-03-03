@@ -62,8 +62,10 @@ The server will start at [http://localhost:5000](http://localhost:5000).
 ### Get all users
 
 ```http
-GET /api/users
+GET /api/v1/users
 ```
+
+> Legacy compatibility routes under `/api/*` remain available.
 
 ### Create a user
 
