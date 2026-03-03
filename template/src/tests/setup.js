@@ -7,14 +7,14 @@ let mongoServer;
 export const connect = async () => {
   mongoServer = await MongoMemoryReplSet.create({
     replSet: { count: 1, storageEngine: 'wiredTiger' },
-    instanceOpts: [{ port: 27017 }],
+    instanceOpts: [{ port: 27017 }]
   });
-  
+
   const uri = mongoServer.getUri();
-  
+
   await mongoose.connect(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   });
 };
 

@@ -1,39 +1,52 @@
 // Import required modules
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { connectDB } from "./config/db.js";
-import userRoutes from "./routes/user.routes.js";
-import authRoutes from "./routes/auth.routes.js";
-import swaggerDocs from "./config/swagger.js";
+import { connectDB } from './config/db.js';
+import { validateEnv } from './config/env.js';
+import userRoutes from './routes/user.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import swaggerDocs from './config/swagger.js';
 
 // Load environment variables from .env file
 dotenv.config();
 
-// Connect to MongoDB database
-connectDB();
+// Validate required environment variables before app startup
+validateEnv();
+
+// Connect to MongoDB database (skip in tests; test setup manages connection)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Initialize Express application
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Health check endpoint
-app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+app.get('/api/v1/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// API Routes
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
+// API Routes (v1 primary + /api backward compatibility)
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // Swagger Documentation
 const PORT = process.env.PORT || 5000;
@@ -43,19 +56,19 @@ swaggerDocs(app, PORT);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found",
+    message: 'Route not found'
   });
 });
 
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  
+
   // Handle JWT errors
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
       success: false,
-      message: 'Invalid token',
+      message: 'Invalid token'
     });
   }
 
@@ -63,13 +76,13 @@ app.use((err, req, res, next) => {
   if (err.name === 'TokenExpiredError') {
     return res.status(401).json({
       success: false,
-      message: 'Token expired',
+      message: 'Token expired'
     });
   }
-  
+
   // Handle validation errors
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map(val => val.message);
+    const messages = Object.values(err.errors).map((val) => val.message);
     return res.status(400).json({
       success: false,
       message: 'Validation error',
@@ -95,10 +108,11 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // Default to 500 server error
-  res.status(500).json({
+  // Default error handler (respect previously set error status when available)
+  const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
+  res.status(statusCode).json({
     success: false,
-    message: 'Server Error',
+    message: err.message || 'Server Error',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error'
   });
 });

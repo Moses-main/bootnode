@@ -5,14 +5,14 @@ import User from '../models/user.model.js';
 // Generate JWT Token
 export const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '30d', // Default 30 days
+    expiresIn: process.env.JWT_EXPIRE || '30d' // Default 30 days
   });
 };
 
 // Generate refresh token
 export const generateRefreshToken = (id) => {
   return jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: process.env.REFRESH_TOKEN_EXPIRE || '90d', // Default 90 days
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRE || '90d' // Default 90 days
   });
 };
 
@@ -29,10 +29,7 @@ export const verifyToken = (token, secret = process.env.JWT_SECRET) => {
 export const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       // Get token from header
       token = req.headers.authorization.split(' ')[1];
@@ -71,9 +68,7 @@ export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       res.status(403);
-      throw new Error(
-        `User role ${req.user.role} is not authorized to access this route`
-      );
+      throw new Error(`User role ${req.user.role} is not authorized to access this route`);
     }
     next();
   };

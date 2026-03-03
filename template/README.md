@@ -32,11 +32,19 @@ npm install
 
 ### 2. Setup environment variables
 
-Create a `.env` file in the project root:
+Copy the example file and update values:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` (minimum required values shown):
 
 ```env
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/mydb
+JWT_SECRET=replace-me
+REFRESH_TOKEN_SECRET=replace-me
 ```
 
 ### 3. Run the development server
@@ -54,8 +62,10 @@ The server will start at [http://localhost:5000](http://localhost:5000).
 ### Get all users
 
 ```http
-GET /api/users
+GET /api/v1/users
 ```
+
+> Legacy compatibility routes under `/api/*` remain available.
 
 ### Create a user
 
@@ -65,7 +75,8 @@ Content-Type: application/json
 
 {
   "name": "John Doe",
-  "email": "john@example.com"
+  "email": "john@example.com",
+  "password": "StrongP@ss1"
 }
 ```
 

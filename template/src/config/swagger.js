@@ -73,22 +73,26 @@ const options = {
       description: 'API documentation for Bootnode backend service',
       contact: {
         name: 'API Support',
-        url: 'https://github.com/Moses-main/bootnode',
-      },
+        url: 'https://github.com/Moses-main/bootnode'
+      }
     },
     servers: [
       {
-        url: 'http://localhost:5000/api',
-        description: 'Development server',
+        url: 'http://localhost:5000/api/v1',
+        description: 'v1 Development server'
       },
+      {
+        url: 'http://localhost:5000/api',
+        description: 'Legacy compatibility server'
+      }
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
+          bearerFormat: 'JWT'
+        }
       },
       schemas: {
         User: {
@@ -97,41 +101,41 @@ const options = {
             _id: {
               type: 'string',
               description: 'The auto-generated ID of the user',
-              example: '507f1f77bcf86cd799439011',
+              example: '507f1f77bcf86cd799439011'
             },
             name: {
               type: 'string',
               description: 'The name of the user',
-              example: 'John Doe',
+              example: 'John Doe'
             },
             email: {
               type: 'string',
               description: 'The email of the user',
-              example: 'john@example.com',
+              example: 'john@example.com'
             },
             createdAt: {
               type: 'string',
               format: 'date-time',
-              description: 'The date and time the user was created',
+              description: 'The date and time the user was created'
             },
             updatedAt: {
               type: 'string',
               format: 'date-time',
-              description: 'The date and time the user was last updated',
-            },
-          },
+              description: 'The date and time the user was last updated'
+            }
+          }
         },
         Error: {
           type: 'object',
           properties: {
             success: {
               type: 'boolean',
-              example: false,
+              example: false
             },
             message: {
               type: 'string',
               description: 'Error message',
-              example: 'User not found',
+              example: 'User not found'
             },
             errors: {
               type: 'array',
@@ -141,22 +145,22 @@ const options = {
                   field: {
                     type: 'string',
                     description: 'The field that caused the error',
-                    example: 'email',
+                    example: 'email'
                   },
                   message: {
                     type: 'string',
                     description: 'Error message for the field',
-                    example: 'Invalid email format',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                    example: 'Invalid email format'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
-  apis: ['./src/routes/*.js'], // Path to the API routes
+  apis: ['./src/routes/*.js'] // Path to the API routes
 };
 
 const specs = swaggerJsdoc(options);
