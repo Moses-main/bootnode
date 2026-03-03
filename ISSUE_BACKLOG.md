@@ -3,19 +3,36 @@
 This backlog captures feature and improvement issues discovered by auditing the repository.  
 Intended next step: create each as a GitHub Issue (unassigned) once a remote and auth are configured.
 
-## 1) Fix auth refresh-token runtime error (`jwt` not imported)
+## Progress Tracker
+- [x] #1 Fix auth refresh-token runtime error (`jwt` not imported)
+- [x] #2 Fix validator runtime error (`validationResult` not imported)
+- [x] #3 Align user creation with required password in schema
+- [ ] #4 Standardize validation middleware usage
+- [x] #5 Configure and enable Jest test runner in template
+- [ ] #6 Add auth endpoint tests (register/login/refresh/logout/me)
+- [ ] #7 Enforce auth rate limiting on `/api/auth`
+- [ ] #8 Improve OpenAPI completeness and route consistency
+- [ ] #9 Add environment template and startup validation
+- [ ] #10 Add lint/format tooling and CI workflow
+- [ ] #11 Add API versioning strategy
+- [ ] #12 Add role-based authorization to privileged user operations
+- [ ] #13 Add pagination/search metadata and filtering improvements
+- [ ] #14 Add optional email delivery integration hooks
+- [ ] #15 Improve CLI UX and safety checks
+
+## 1) ✅ Fix auth refresh-token runtime error (`jwt` not imported)
 - **Type:** Bug
 - **Problem:** `auth.controller.js` calls `jwt.verify(...)` but doesn't import `jwt`, causing runtime failure when `/api/auth/refresh-token` is hit.
 - **Scope:** Add missing import, add test coverage for refresh flow.
 - **Acceptance criteria:** Refresh endpoint returns 200 with valid refresh token and 401 with invalid token.
 
-## 2) Fix validator runtime error (`validationResult` not imported)
+## 2) ✅ Fix validator runtime error (`validationResult` not imported)
 - **Type:** Bug
 - **Problem:** `user.validator.js` uses `validationResult` without importing it.
 - **Scope:** Add import and ensure error response shape is consistent.
 - **Acceptance criteria:** Invalid requests to user routes return validation errors without server crash.
 
-## 3) Align user creation with required password in schema
+## 3) ✅ Align user creation with required password in schema
 - **Type:** Bug / API consistency
 - **Problem:** `User` schema requires `password`, but `createUser` controller creates users with only `name` and `email`.
 - **Scope:** Decide contract: either make password optional for admin-created users, or require password in create-user endpoint; update docs/tests accordingly.
@@ -27,7 +44,7 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Consolidate into one validation approach and one error schema.
 - **Acceptance criteria:** All routes use one validation helper and return consistent status/error format.
 
-## 5) Configure and enable Jest test runner in template
+## 5) ✅ Configure and enable Jest test runner in template
 - **Type:** Tooling
 - **Problem:** `npm test` currently exits with placeholder error despite test files being present.
 - **Scope:** Add proper Jest config/script for ESM and run test suite.
