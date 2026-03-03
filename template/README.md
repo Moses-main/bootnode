@@ -45,7 +45,10 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/mydb
 JWT_SECRET=replace-me
 REFRESH_TOKEN_SECRET=replace-me
+<<<<<<< codex/analyze-codebase-for-project-overview
 EMAIL_PROVIDER=log
+=======
+>>>>>>> main
 ```
 
 ### 3. Run the development server

@@ -8,7 +8,10 @@ beforeAll(async () => {
   process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'test-refresh-secret';
   process.env.JWT_EXPIRE = '1h';
   process.env.REFRESH_TOKEN_EXPIRE = '7d';
+<<<<<<< codex/analyze-codebase-for-project-overview
   process.env.EMAIL_PROVIDER = 'disabled';
+=======
+>>>>>>> main
   await connect();
 });
 

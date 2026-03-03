@@ -1,0 +1,10 @@
+/* Custom theme for bootnode */
+:root {
+  --vp-c-brand: #646cff;
+  --vp-c-brand-light: #747bff;
+  --vp-c-brand-dark: #535bf2;
+}
+
+.vp-doc h1 {
+  font-weight: 700;
+}

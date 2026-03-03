@@ -19,6 +19,8 @@ import {
 import { validate } from '../middleware/validators/validation.middleware.js';
 import { apiLimiter } from '../middleware/rateLimiter.js';
 import { protect, authorize } from '../utils/jwt.js';
+import { protect, authorize } from '../utils/jwt.js';
+>>>>>>> main
 
 // Create a new router instance
 const router = express.Router();
@@ -293,7 +295,15 @@ router.patch('/:id', validate(updateUserValidation), updateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+<<<<<<< codex/analyze-codebase-for-project-overview
 router.delete('/:id', protect, authorize('admin'), validate(userIdValidation), deactivateUser);
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+router.delete('/:id', protect, authorize('admin'), validate(userIdValidation), deactivateUser);
+=======
+router.delete('/:id', validate(userIdValidation), deactivateUser);
+>>>>>>> main
+>>>>>>> main
 
 /**
  * @swagger
@@ -326,6 +336,10 @@ router.delete('/:id', protect, authorize('admin'), validate(userIdValidation), d
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+<<<<<<< codex/analyze-codebase-for-project-overview
+=======
+<<<<<<< codex/analyze-codebase-for-project-overview
+>>>>>>> main
 router.delete(
   '/:id/permanent',
   protect,
@@ -333,6 +347,12 @@ router.delete(
   validate(userIdValidation),
   deleteUser
 );
+<<<<<<< codex/analyze-codebase-for-project-overview
+=======
+=======
+router.delete('/:id/permanent', validate(userIdValidation), deleteUser);
+>>>>>>> main
+>>>>>>> main
 
 // Export the router for use in other files
 export default router;

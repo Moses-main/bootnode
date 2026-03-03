@@ -4,7 +4,7 @@
   "description": "A simple CLI tool to bootstrap Express + MongoDB backend projects with sensible defaults, just like create-react-app but for backend.",
   "main": "bin/index.js",
   "bin": {
-    "bootnode": "./bin/index.js"
+    "bootnode": "bin/index.js"
   },
   "type": "module",
   "keywords": [
@@ -32,5 +32,17 @@
   "bugs": {
     "url": "https://github.com/Moses-main/bootnode-x/issues"
   },
-  "homepage": "https://github.com/Moses-main/bootnode-x#readme"
+  "homepage": "https://github.com/Moses-main/bootnode-x#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
 }
