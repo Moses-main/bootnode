@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./config/db.js";
+import { validateEnv } from './config/env.js';
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import swaggerDocs from "./config/swagger.js";
@@ -11,8 +12,13 @@ import swaggerDocs from "./config/swagger.js";
 // Load environment variables from .env file
 dotenv.config();
 
-// Connect to MongoDB database
-connectDB();
+// Validate required environment variables before app startup
+validateEnv();
+
+// Connect to MongoDB database (skip in tests; test setup manages connection)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Initialize Express application
 const app = express();
@@ -95,10 +101,11 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // Default to 500 server error
-  res.status(500).json({
+  // Default error handler (respect previously set error status when available)
+  const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
+  res.status(statusCode).json({
     success: false,
-    message: 'Server Error',
+    message: err.message || 'Server Error',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error'
   });
 });
