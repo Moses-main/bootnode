@@ -102,15 +102,34 @@ router.get('/', validate(paginationValidation), getUsers);
  *         schema:
  *           type: string
  *         description: Search term
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
  *     responses:
  *       200:
  *         description: List of matching users
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 meta:
+ *                   type: object
  *       400:
  *         description: Invalid search query
  *         content:

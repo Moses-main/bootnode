@@ -61,6 +61,18 @@ export const searchUsersValidation = [
 ];
 
 export const paginationValidation = [
+  query('isActive').optional().isBoolean().withMessage('isActive must be a boolean').toBoolean(),
+
+  query('sortBy')
+    .optional()
+    .isIn(['createdAt', 'updatedAt', 'name', 'email'])
+    .withMessage('sortBy must be one of: createdAt, updatedAt, name, email'),
+
+  query('sortOrder')
+    .optional()
+    .isIn(['asc', 'desc'])
+    .withMessage('sortOrder must be one of: asc, desc'),
+
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer').toInt(),
 
   query('limit')

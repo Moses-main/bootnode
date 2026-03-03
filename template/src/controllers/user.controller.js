@@ -15,15 +15,25 @@ export const getUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    const sortBy = req.query.sortBy || 'createdAt';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
 
-    // Build query for search if search term is provided
-    const searchQuery = req.query.search ? { $text: { $search: req.query.search } } : {};
+    const query = {};
 
-    // Get total count for pagination
-    const total = await User.countDocuments(searchQuery);
+    if (req.query.search) {
+      query.$text = { $search: req.query.search };
+    }
 
-    // Fetch paginated users
-    const users = await User.find(searchQuery).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    if (typeof req.query.isActive === 'boolean') {
+      query.isActive = req.query.isActive;
+    }
+
+    const total = await User.countDocuments(query);
+
+    const users = await User.find(query)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
 
     res.json({
       data: users,
@@ -31,7 +41,13 @@ export const getUsers = async (req, res) => {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limit),
+        sortBy,
+        sortOrder: sortOrder === 1 ? 'asc' : 'desc',
+        filters: {
+          search: req.query.search || null,
+          isActive: typeof req.query.isActive === 'boolean' ? req.query.isActive : null
+        }
       }
     });
   } catch (error) {
@@ -206,17 +222,39 @@ export const deleteUser = async (req, res) => {
 export const searchUsers = async (req, res) => {
   try {
     const { q } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
     if (!q || q.trim() === '') {
       return res.status(400).json({ message: 'Search query is required' });
     }
 
-    const users = await User.find(
-      { $text: { $search: q } },
-      { score: { $meta: 'textScore' } }
-    ).sort({ score: { $meta: 'textScore' } });
+    const searchQuery = { $text: { $search: q } };
+    if (typeof req.query.isActive === 'boolean') {
+      searchQuery.isActive = req.query.isActive;
+    }
 
-    res.json(users);
+    const total = await User.countDocuments(searchQuery);
+
+    const users = await User.find(searchQuery, { score: { $meta: 'textScore' } })
+      .sort({ score: { $meta: 'textScore' } })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      data: users,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        query: q,
+        filters: {
+          isActive: typeof req.query.isActive === 'boolean' ? req.query.isActive : null
+        }
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error searching users', error: error.message });
   }

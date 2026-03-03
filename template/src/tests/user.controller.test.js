@@ -77,6 +77,25 @@ describe('User API', () => {
   });
 
   describe('GET /api/users', () => {
+    it('should support filtering inactive users and custom sorting', async () => {
+      await User.create([
+        { name: 'Alpha User', email: 'alpha@example.com', password: 'StrongP@ss1' },
+        { name: 'Zulu User', email: 'zulu@example.com', password: 'StrongP@ss2' }
+      ]);
+
+      const toDeactivate = await User.findOne({ email: 'zulu@example.com' });
+      await User.findByIdAndUpdate(toDeactivate._id, { isActive: false });
+
+      const inactiveRes = await request(app)
+        .get('/api/users')
+        .query({ isActive: false, sortBy: 'name', sortOrder: 'asc' });
+
+      expect(inactiveRes.statusCode).toEqual(200);
+      expect(inactiveRes.body.meta.filters.isActive).toBe(false);
+      expect(inactiveRes.body.data.every((u) => u.email === 'zulu@example.com')).toBe(true);
+      expect(inactiveRes.body.meta.sortBy).toBe('name');
+      expect(inactiveRes.body.meta.sortOrder).toBe('asc');
+    });
     it('should get all users with pagination', async () => {
       // Create multiple test users
       await User.create([
@@ -107,15 +126,17 @@ describe('User API', () => {
       const resName = await request(app).get('/api/users/search').query({ q: 'John' });
 
       expect(resName.statusCode).toEqual(200);
-      expect(resName.body.length).toBeGreaterThanOrEqual(1);
-      expect(resName.body.some((u) => u.name === 'John Doe')).toBe(true);
+      expect(Array.isArray(resName.body.data)).toBe(true);
+      expect(resName.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(resName.body.data.some((u) => u.name === 'John Doe')).toBe(true);
+      expect(resName.body.meta).toBeDefined();
 
       // Search by email
       const resEmail = await request(app).get('/api/users/search').query({ q: 'jane@example.com' });
 
       expect(resEmail.statusCode).toEqual(200);
-      expect(resEmail.body.length).toBeGreaterThanOrEqual(1);
-      expect(resEmail.body.some((u) => u.name === 'Jane Smith')).toBe(true);
+      expect(resEmail.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(resEmail.body.data.some((u) => u.name === 'Jane Smith')).toBe(true);
     });
   });
 
