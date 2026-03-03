@@ -2,6 +2,7 @@ import User from '../models/user.model.js';
 import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 import asyncHandler from 'express-async-handler';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 // @desc    Register a new user
 // @route   POST /api/v1/auth/register
