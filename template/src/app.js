@@ -11,8 +11,10 @@ import swaggerDocs from "./config/swagger.js";
 // Load environment variables from .env file
 dotenv.config();
 
-// Connect to MongoDB database
-connectDB();
+// Connect to MongoDB database (skip in tests; test setup manages connection)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Initialize Express application
 const app = express();
