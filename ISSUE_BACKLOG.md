@@ -15,8 +15,13 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - [x] #9 Add environment template and startup validation
 - [x] #10 Add lint/format tooling and CI workflow
 - [x] #11 Add API versioning strategy
+<<<<<<< codex/analyze-codebase-for-project-overview
+- [x] #12 Add role-based authorization to privileged user operations
+- [x] #13 Add pagination/search metadata and filtering improvements
+=======
 - [ ] #12 Add role-based authorization to privileged user operations
 - [ ] #13 Add pagination/search metadata and filtering improvements
+>>>>>>> main
 - [ ] #14 Add optional email delivery integration hooks
 - [ ] #15 Improve CLI UX and safety checks
 
@@ -86,13 +91,21 @@ Intended next step: create each as a GitHub Issue (unassigned) once a remote and
 - **Scope:** Introduce `/api/v1` base path and keep backwards compatibility or migration plan.
 - **Acceptance criteria:** Routes/docs consistently use chosen API versioning format.
 
+<<<<<<< codex/analyze-codebase-for-project-overview
+## 12) ✅ Add role-based authorization to privileged user operations
+=======
 ## 12) Add role-based authorization to privileged user operations
+>>>>>>> main
 - **Type:** Security/feature
 - **Problem:** `authorize` helper exists but is not used by routes.
 - **Scope:** Protect sensitive operations (delete, permanent delete, admin listing) by role.
 - **Acceptance criteria:** Restricted routes reject non-admin users with 403.
 
+<<<<<<< codex/analyze-codebase-for-project-overview
+## 13) ✅ Add pagination/search metadata and filtering improvements
+=======
 ## 13) Add pagination/search metadata and filtering improvements
+>>>>>>> main
 - **Type:** Feature
 - **Problem:** Search endpoint returns array only; list endpoint has metadata but limited filtering controls.
 - **Scope:** Add metadata to search results and optional filters (active status, sort fields).

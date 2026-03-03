@@ -5,6 +5,10 @@ import User from '../models/user.model.js';
 
 // Connect to the in-memory database before tests run
 beforeAll(async () => {
+  process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-jwt-secret';
+  process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'test-refresh-secret';
+  process.env.JWT_EXPIRE = '1h';
+  process.env.REFRESH_TOKEN_EXPIRE = '7d';
   await connect();
 });
 
@@ -24,6 +28,26 @@ describe('User API', () => {
     name: 'Test User',
     email: 'test@example.com',
     password: 'StrongP@ss1'
+<<<<<<< codex/analyze-codebase-for-project-overview
+  };
+
+  const createAdminToken = async () => {
+    const adminUser = {
+      name: 'Admin User',
+      email: 'admin@example.com',
+      password: 'StrongP@ss1'
+    };
+
+    await request(app).post('/api/auth/register').send(adminUser);
+    await User.findOneAndUpdate({ email: adminUser.email }, { role: 'admin' });
+
+    const loginRes = await request(app)
+      .post('/api/auth/login')
+      .send({ email: adminUser.email, password: adminUser.password });
+
+    return loginRes.body.data.accessToken;
+=======
+>>>>>>> main
   };
 
   describe('POST /api/users', () => {
@@ -56,6 +80,25 @@ describe('User API', () => {
   });
 
   describe('GET /api/users', () => {
+    it('should support filtering inactive users and custom sorting', async () => {
+      await User.create([
+        { name: 'Alpha User', email: 'alpha@example.com', password: 'StrongP@ss1' },
+        { name: 'Zulu User', email: 'zulu@example.com', password: 'StrongP@ss2' }
+      ]);
+
+      const toDeactivate = await User.findOne({ email: 'zulu@example.com' });
+      await User.findByIdAndUpdate(toDeactivate._id, { isActive: false });
+
+      const inactiveRes = await request(app)
+        .get('/api/users')
+        .query({ isActive: false, sortBy: 'name', sortOrder: 'asc' });
+
+      expect(inactiveRes.statusCode).toEqual(200);
+      expect(inactiveRes.body.meta.filters.isActive).toBe(false);
+      expect(inactiveRes.body.data.every((u) => u.email === 'zulu@example.com')).toBe(true);
+      expect(inactiveRes.body.meta.sortBy).toBe('name');
+      expect(inactiveRes.body.meta.sortOrder).toBe('asc');
+    });
     it('should get all users with pagination', async () => {
       // Create multiple test users
       await User.create([
@@ -86,15 +129,27 @@ describe('User API', () => {
       const resName = await request(app).get('/api/users/search').query({ q: 'John' });
 
       expect(resName.statusCode).toEqual(200);
+<<<<<<< codex/analyze-codebase-for-project-overview
+      expect(Array.isArray(resName.body.data)).toBe(true);
+      expect(resName.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(resName.body.data.some((u) => u.name === 'John Doe')).toBe(true);
+      expect(resName.body.meta).toBeDefined();
+=======
       expect(resName.body.length).toBeGreaterThanOrEqual(1);
       expect(resName.body.some((u) => u.name === 'John Doe')).toBe(true);
+>>>>>>> main
 
       // Search by email
       const resEmail = await request(app).get('/api/users/search').query({ q: 'jane@example.com' });
 
       expect(resEmail.statusCode).toEqual(200);
+<<<<<<< codex/analyze-codebase-for-project-overview
+      expect(resEmail.body.data.length).toBeGreaterThanOrEqual(1);
+      expect(resEmail.body.data.some((u) => u.name === 'Jane Smith')).toBe(true);
+=======
       expect(resEmail.body.length).toBeGreaterThanOrEqual(1);
       expect(resEmail.body.some((u) => u.name === 'Jane Smith')).toBe(true);
+>>>>>>> main
     });
   });
 
@@ -168,10 +223,17 @@ describe('User API', () => {
   });
 
   describe('DELETE /api/users/:id', () => {
-    it('should deactivate a user', async () => {
+    it('should deactivate a user as admin', async () => {
+      const adminToken = await createAdminToken();
       const user = await User.create(testUser);
 
+<<<<<<< codex/analyze-codebase-for-project-overview
+      const res = await request(app)
+        .delete(`/api/users/${user._id}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+=======
       const res = await request(app).delete(`/api/users/${user._id}`);
+>>>>>>> main
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toContain('deactivated');
@@ -179,14 +241,38 @@ describe('User API', () => {
       // Verify user is deactivated
       const deactivatedUser = await User.findOne({ _id: user._id, isActive: false });
       expect(deactivatedUser).not.toBeNull();
+<<<<<<< codex/analyze-codebase-for-project-overview
+    });
+
+    it('should reject non-admin delete attempts', async () => {
+      await request(app).post('/api/auth/register').send(testUser);
+      const loginRes = await request(app)
+        .post('/api/auth/login')
+        .send({ email: testUser.email, password: testUser.password });
+
+      const user = await User.findOne({ email: testUser.email });
+      const res = await request(app)
+        .delete(`/api/users/${user._id}`)
+        .set('Authorization', `Bearer ${loginRes.body.data.accessToken}`);
+
+      expect(res.statusCode).toEqual(403);
+=======
+>>>>>>> main
     });
   });
 
   describe('DELETE /api/users/:id/permanent', () => {
-    it('should permanently delete a user', async () => {
+    it('should permanently delete a user as admin', async () => {
+      const adminToken = await createAdminToken();
       const user = await User.create(testUser);
 
+<<<<<<< codex/analyze-codebase-for-project-overview
+      const res = await request(app)
+        .delete(`/api/users/${user._id}/permanent`)
+        .set('Authorization', `Bearer ${adminToken}`);
+=======
       const res = await request(app).delete(`/api/users/${user._id}/permanent`);
+>>>>>>> main
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.message).toContain('deleted');
